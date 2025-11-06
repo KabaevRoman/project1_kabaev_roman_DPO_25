@@ -1,7 +1,7 @@
 [project]
 name = "project1-kabaev-roman-dpo-25"
 version = "0.1.0"
-description = ""
+description = "Текстовая приключенческая игра 'Лабиринт Сокровищ' - исследуйте лабиринт, решайте загадки и находите сокровища"
 authors = [{ name = "Roman Kabaev" }]
 readme = "README.md"
 requires-python = ">=3.12"

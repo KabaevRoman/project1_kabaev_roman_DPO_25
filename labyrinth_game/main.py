@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from labyrinth_game.constants import ROOMS
+from labyrinth_game.constants import COMMANDS, ROOMS
 from labyrinth_game.player_actions import (
     get_input,
     move_player,
@@ -19,11 +19,22 @@ from labyrinth_game.utils import (
 
 
 def process_command(game_state: GameState, command: str):
+    """
+    Обрабатывает команду игрока и выполняет соответствующее действие.
+
+    Args:
+        game_state: Текущее состояние игры
+        command: Команда, введенная игроком
+    """
     parts = command.split()
     if not parts:
         return
     cmd = parts[0].lower()
     args = parts[1:] if len(parts) > 1 else []
+
+    if cmd in ["north", "south", "east", "west"]:
+        move_player(game_state, cmd)
+        return
 
     match cmd:
         case "look":
@@ -46,12 +57,16 @@ def process_command(game_state: GameState, command: str):
         case "inventory":
             show_inventory(game_state)
         case "solve":
-            if game_state["current_room"] == "treasure_room" and "treasure_chest" in ROOMS["treasure_room"]["items"]:
+            treasure_room_condition = (
+                game_state["current_room"] == "treasure_room"
+                and "treasure_chest" in ROOMS["treasure_room"]["items"]
+            )
+            if treasure_room_condition:
                 attempt_open_treasure(game_state)
             else:
                 solve_puzzle(game_state)
         case "help":
-            show_help()
+            show_help(COMMANDS)
         case "quit":
             game_state["game_over"] = True
         case _:
@@ -59,6 +74,10 @@ def process_command(game_state: GameState, command: str):
 
 
 def main():
+    """
+    Главная функция, запускающая игровой цикл.
+    Инициализирует состояние игры и обрабатывает команды пользователя.
+    """
     game_state: GameState = {
         "player_inventory": [],
         "current_room": "entrance",
