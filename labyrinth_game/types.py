@@ -19,6 +19,7 @@ Item = Literal[
     "flower",
     "crystal",
     "treasure_chest",
+    "coin",
 ]
 
 
